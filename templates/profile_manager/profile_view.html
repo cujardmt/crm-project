@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div id="profile_view">
+    <h1>Profile View</h1>
+    <p>{{ profile.last_name }}</p>
+    <p>{{ profile.first_name }}</p>
+  </div>
+
+  {% load custom_filters %}
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      {% for field_name in fields %}
+        <th>{{ field_name }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for contact in contacts %}
+      <tr>
+        {% for field_name in fields %}
+          <td>{{ contact|getattribute:field_name }}</td>
+        {% endfor %}
+        <td>
+          <a href="{% url 'contacts_manager:view_contact' profile_id=profile.id contact_id=contact.id %}">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </a>
+        </td>
+        <td>
+          <a href="{% url 'contacts_manager:create_contact' profile_id=profile.id %}">
+            <i class="fa-solid fa-plus"></i>
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+  </table>
+{% endblock %}

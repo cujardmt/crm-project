@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            <strong>Error!</strong> There are errors in the form.
+        </div>
+    {% endif %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post"
+          class="post-form"
+          action="{% url 'profile_manager:save_profile' profile_id=profile.id %}"
+    >
+
+        {% csrf_token %}
+        <div class="mb-3">
+            {% if form.errors.last_name %}
+                <div class="text-danger">{{ form.errors.last_name.0 }}</div>
+            {% endif %}
+          <label for="in_last_name" class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="in_last_name"
+                 name="last_name"
+                 placeholder="Last Name"
+                 value="{{ profile.last_name }}"
+          >
+        </div>
+        <div class="mb-3">
+            {% if form.errors.first_name %}
+                <div class="text-danger">{{ form.errors.first_name.0 }}</div>
+            {% endif %}
+          <label for="in_first_name" class="form-label">First Name</label>
+          <input type="text" class="form-control"
+                 id="in_first_name"
+                 name="first_name"
+                 placeholder="First Name"
+                 value="{{ profile.first_name }}"
+          >
+        </div>
+        <div class="mb-3">
+            {% if form.errors.email %}
+                <div class="text-danger">{{ form.errors.email.0 }}</div>
+            {% endif %}
+          <label for="exampleFormControlInput1" class="form-label">Email address</label>
+          <input type="email" class="form-control"
+                 id="exampleFormControlInput1"
+                 name="email"
+                 placeholder="name@example.com"
+                 value="{{ profile.email }}"
+          >
+        </div>
+        <div class="mb-3">
+            <label for="in_phone_number" class="form-label">Phone Number</label>
+            <input type="text" class="form-control"
+                   id="in_phone_number"
+                   name="phone"
+                   placeholder="Phone Number"
+                   value="{{ profile.phone }}"
+            >
+        </div>
+        <div class="mb-3">
+            <label for="in_address" class="form-label">Address</label>
+            <input type="text" class="form-control"
+                   id="in_address"
+                   name="address"
+                   placeholder="Address"
+                   value="{{ profile.address }}"
+            >
+        </div>
+
+<!--        <a class="btn btn-danger"-->
+<!--           href="{% url 'profile_manager:delete_profile' profile_id=profile.id  %}"-->
+<!--           role="button">Delete Profile-->
+<!--        </a>-->
+        <button type="submit" class="btn btn-primary mb-3">
+            {% if profile.id %}Update{% else %}Create{% endif %} Profile
+        </button>
+
+    </form>
+{% endblock %}
