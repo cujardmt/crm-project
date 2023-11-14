@@ -44,22 +44,30 @@ Faker.seed(0)  # Set a seed for reproducibility
 # Create 10 profiles with random data
 profiles = []
 for _ in range(10):
+    username = fake.user_name()
+    password = 'password'
+    email = fake.email()
+    last_name = fake.last_name()
+    first_name = fake.first_name()
+
     user = User.objects.create_user(
-        username=fake.user_name(),
-        password='password',
-        email=fake.email(),
+        username=username,
+        password=password,
+        email=email,
+        last_name=last_name,
     )
 
     profile = Profile.objects.create(
         user=user,
-        first_name=fake.first_name(),
-        last_name=fake.last_name(),
-        email=fake.email(),
+        first_name=first_name,
+        last_name=user.last_name,
+        email=user.email,
         phone=fake.phone_number(),
         address=fake.address(),
         created_at=timezone.now(),
         updated_at=timezone.now(),
     )
+
     profiles.append(profile)
 
 # Create 1 to 3 contacts for each profile

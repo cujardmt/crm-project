@@ -1,4 +1,4 @@
-from django.core.checks import messages
+from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
@@ -13,12 +13,15 @@ def view_profile(request):
     user_id = request.session['user_id']
     email = request.session['email']
     last_name = request.session['last_name']
-    print(f'User ID {user_id} email {email} last name {last_name}')
+    print(f'User ID: {user_id} --- Email: {email} Last Name: {last_name}')
+
     try:
         # profile = Profile.objects.get(user_id=user_id, email=email, last_name=last_name)
         profile = get_object_or_404(Profile, user_id=user_id, email=email, last_name=last_name)
+        print(f'Profile String: {profile.__str__()}')
     except Http404:
         profile = Profile(user_id=user_id, last_name=last_name, email=email)
+        print(f'Profile not found. Creating one.')
 
     form = ProfileForm(request.POST or None, instance=profile)
     context = {
@@ -46,9 +49,9 @@ def save_profile(request, profile_id=None):
         form = ProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-            profile.contacts.add(form.instance)
             messages.success(request, msg)
         else:
+            print(f'{form.errors}')
             context['form'] = form
 
     return render(request, template, context)

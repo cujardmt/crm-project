@@ -17,3 +17,4 @@ class ContactForm(forms.ModelForm):
         self.fields['email'].required = True
         # Set optional fields (remove 'required' attribute)
         self.fields['phone'].required = False
+        # TODO What if the user wants to change his\her user name?
