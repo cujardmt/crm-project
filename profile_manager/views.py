@@ -45,11 +45,19 @@ def save_profile(request, profile_id=None):
         'profile': profile,
     }
 
+    form = ProfileForm(instance=profile)
+
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
             messages.success(request, msg)
+
+            # Update associated User email if changed
+            user = profile.user
+            if user.email != profile.email:
+                user.email = profile.email
+                user.save()
         else:
             print(f'{form.errors}')
             context['form'] = form
